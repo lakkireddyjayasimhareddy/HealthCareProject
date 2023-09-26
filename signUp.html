@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/LoginForm/styleSignin.css" />
+  </head>
+  <body>
+    <div class="center">
+      <h1>Sign Up</h1>
+      <form method="post">
+        <div class="txt_field">
+          <input type="text" id="name" required />
+          <span></span>
+          <label>Name</label>
+        </div>
+        <div class="txt_field">
+          <input type="text" id="email" required />
+          <span></span>
+          <label>Email</label>
+        </div>
+        <div class="txt_field">
+          <input type="password" id="password" required />
+          <span></span>
+          <label>Password</label>
+        </div>
+        <!-- <div class="pass">Forgot Password?</div> -->
+        <input type="submit" value="Signup" id="signUp" />
+        <div class="signup_link">
+          Are You a member? <a href="signIn.html">SignIn</a>
+        </div>
+      </form>
+    </div>
+
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+      import { getDatabase } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBg42gXdt79tNaYXDrkpEZ9Ar4HvfE7tKA",
+        authDomain: "healthcareappointment-4547f.firebaseapp.com",
+        databaseURL:
+          "https://healthcareappointment-4547f-default-rtdb.firebaseio.com",
+        projectId: "healthcareappointment-4547f",
+        storageBucket: "healthcareappointment-4547f.appspot.com",
+        messagingSenderId: "822470511680",
+        appId: "1:822470511680:web:f64e74c5085c66d45263a5",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+      const auth = getAuth();
+
+      signUp.addEventListener("click", (e) => {
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+
+            set(ref(database, "users/" + user.uid), {
+              email: email,
+            });
+
+            alert("user created!");
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+            alert(errorMessage);
+            // ..
+          });
+      });
+    </script>
+  </body>
+</html>

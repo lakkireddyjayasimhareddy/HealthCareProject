@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Login</title>
+    <link rel="stylesheet" href="/LoginForm/styleSignin.css" />
+  </head>
+  <body>
+    <div class="center">
+      <h1>Login</h1>
+      <form method="post">
+        <div class="txt_field">
+          <input type="text" id="lemail" required />
+          <span></span>
+          <label>Email</label>
+        </div>
+        <div class="txt_field">
+          <input type="password" id="lpassword" required />
+          <span></span>
+          <label>Password</label>
+        </div>
+        <!-- <div class="pass">Forgot Password?</div> -->
+        <input type="submit" value="Login" />
+        <div class="signup_link">
+          Not a member? <a href="signUp.html">Signup</a>
+        </div>
+      </form>
+    </div>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+      import {
+        getDatabase,
+        set,
+        ref,
+        update,
+      } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBg42gXdt79tNaYXDrkpEZ9Ar4HvfE7tKA",
+        authDomain: "healthcareappointment-4547f.firebaseapp.com",
+        databaseURL:
+          "https://healthcareappointment-4547f-default-rtdb.firebaseio.com",
+        projectId: "healthcareappointment-4547f",
+        storageBucket: "healthcareappointment-4547f.appspot.com",
+        messagingSenderId: "822470511680",
+        appId: "1:822470511680:web:f64e74c5085c66d45263a5",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+      const auth = getAuth();
+
+      login.addEventListener("click", (e) => {
+        var email = document.getElementById("lemail").value;
+        var password = document.getElementById("lpassword").value;
+
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+
+            const dt = new Date();
+            update(ref(database, "users/" + user.uid), {
+              last_login: dt,
+            });
+            alert("User loged in!");
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+            alert(errorMessage);
+          });
+      });
+
+      const user = auth.currentUser;
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          const uid = user.uid;
+          window.location = "Main.html";
+          // ...
+        } else {
+          // User is signed out
+          // ...
+        }
+      });
+    </script>
+  </body>
+</html>
