@@ -1,0 +1,76 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Main</title>
+  </head>
+  <body>
+    <div class="nav">
+      <div id="logout">Logout</div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+      import {
+        getDatabase,
+        set,
+        ref,
+        update,
+      } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBbnonzeF-sWDAVK-8rBy53N-pD0Rvxwxg",
+        authDomain: "health-care-project-3b71f.firebaseapp.com",
+        databaseURL:
+          "https://health-care-project-3b71f-default-rtdb.firebaseio.com",
+        projectId: "health-care-project-3b71f",
+        storageBucket: "health-care-project-3b71f.appspot.com",
+        messagingSenderId: "830825947381",
+        appId: "1:830825947381:web:554e30efb99bea04bde5bc",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+      const auth = getAuth();
+      const user = auth.currentUser;
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          const uid = user.uid;
+          // ...
+        } else {
+          // User is signed out
+          // ...
+          window.location = "login.html";
+        }
+      });
+      logout.addEventListener("click", (e) => {
+        signOut(auth)
+          .then(() => {
+            // Sign-out successful.
+            window.location = "index.html";
+            alert("user logged out");
+          })
+          .catch((error) => {
+            // An error happened.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+            alert(errorMessage);
+          });
+      });
+    </script>
+  </body>
+</html>
